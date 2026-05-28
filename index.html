@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catalogo TIC · Competencia 28 · Primaria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <!-- ================================================
+       CABECERA PRINCIPAL
+  ================================================ -->
+  <header class="site-header">
+    <div class="header-bg-shapes" aria-hidden="true">
+      <span class="shape shape-1"></span>
+      <span class="shape shape-2"></span>
+      <span class="shape shape-3"></span>
+      <span class="shape shape-4"></span>
+    </div>
+    <div class="header-inner">
+      <div class="header-logo-wrap">
+        <img
+          src="assets/images/logo.png"
+          alt="Logo de la institucion educativa"
+          class="school-logo"
+          onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='flex';"
+        />
+        <div class="logo-fallback" style="display:none;">
+          <span>IE</span>
+        </div>
+      </div>
+      <div class="header-text">
+        <p class="header-eyebrow">Educacion Primaria · 1.° a 6.° Grado</p>
+        <h1 class="header-title">Catalogo de Actividades TIC</h1>
+        <p class="header-sub">Competencia 28 · Se desenvuelve en entornos virtuales generados por las TIC</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================================================
+       BARRA DE NAVEGACION POR GRADO (sticky)
+  ================================================ -->
+  <nav class="grade-nav" aria-label="Filtrar por grado">
+    <div class="grade-nav-inner">
+      <button class="btn-grade active" data-grade="todos">Todos los grados</button>
+      <button class="btn-grade" data-grade="1">1.° Grado</button>
+      <button class="btn-grade" data-grade="2">2.° Grado</button>
+      <button class="btn-grade" data-grade="3">3.° Grado</button>
+      <button class="btn-grade" data-grade="4">4.° Grado</button>
+      <button class="btn-grade" data-grade="5">5.° Grado</button>
+      <button class="btn-grade" data-grade="6">6.° Grado</button>
+    </div>
+  </nav>
+
+  <!-- ================================================
+       BARRA DE CONTROLES
+  ================================================ -->
+  <section class="controls-bar" aria-label="Busqueda y filtros">
+    <div class="controls-inner">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          type="search"
+          id="searchInput"
+          class="search-input"
+          placeholder="Buscar actividad, software, area..."
+          aria-label="Buscar actividades"
+        />
+      </div>
+      <select id="filterDiff" class="filter-select" aria-label="Filtrar por dificultad">
+        <option value="todos">Dificultad</option>
+        <option value="basico">Basico</option>
+        <option value="intermedio">Intermedio</option>
+        <option value="avanzado">Avanzado</option>
+      </select>
+      <select id="filterArea" class="filter-select" aria-label="Filtrar por area">
+        <option value="todos">Area curricular</option>
+      </select>
+      <button class="btn-primary" id="btnAdd" aria-label="Agregar nueva actividad">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Nueva actividad
+      </button>
+    </div>
+    <div class="stats-row" id="statsRow" aria-live="polite"></div>
+  </section>
+
+  <!-- ================================================
+       CATALOGO PRINCIPAL
+  ================================================ -->
+  <main class="catalog-main" id="catalogContainer" aria-label="Catalogo de actividades"></main>
+
+  <!-- ================================================
+       MODAL: FORMULARIO AGREGAR / EDITAR
+  ================================================ -->
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <button class="modal-close" id="btnClose" aria-label="Cerrar formulario">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <h2 class="modal-title" id="modalTitle">Nueva actividad</h2>
+
+      <div class="form-grid">
+
+        <!-- Titulo -->
+        <div class="form-group full">
+          <label for="fTitulo">Titulo de la actividad <span class="req">*</span></label>
+          <input type="text" id="fTitulo" placeholder="Ej: Creamos un afiche digital con Canva" />
+        </div>
+
+        <!-- Grado y dificultad -->
+        <div class="form-group">
+          <label for="fGrade">Grado recomendado <span class="req">*</span></label>
+          <select id="fGrade">
+            <option value="">Seleccionar...</option>
+            <option value="1">1.° Grado</option>
+            <option value="2">2.° Grado</option>
+            <option value="3">3.° Grado</option>
+            <option value="4">4.° Grado</option>
+            <option value="5">5.° Grado</option>
+            <option value="6">6.° Grado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="fDiff">Nivel de dificultad <span class="req">*</span></label>
+          <select id="fDiff">
+            <option value="">Seleccionar...</option>
+            <option value="basico">Basico</option>
+            <option value="intermedio">Intermedio</option>
+            <option value="avanzado">Avanzado</option>
+          </select>
+        </div>
+
+        <!-- Area -->
+        <div class="form-group full">
+          <label for="fArea">Area o contexto curricular</label>
+          <input type="text" id="fArea" placeholder="Ej: Comunicacion, Ciencia y Tecnologia, Arte..." />
+        </div>
+
+        <!-- Descripcion -->
+        <div class="form-group full">
+          <label for="fDesc">Descripcion breve <span class="req">*</span></label>
+          <textarea id="fDesc" rows="3" placeholder="Que haran los estudiantes en esta actividad..."></textarea>
+        </div>
+
+        <!-- Recurso TIC -->
+        <div class="form-group">
+          <label for="fTic">Recurso TIC utilizado <span class="req">*</span></label>
+          <input type="text" id="fTic" placeholder="Ej: Canva, Google Slides, Paint..." />
+        </div>
+
+        <!-- Imagen del software -->
+        <div class="form-group">
+          <label for="fImagen">
+            Imagen del software
+            <span class="label-hint">(nombre del archivo en assets/images/actividades/)</span>
+          </label>
+          <input type="text" id="fImagen" placeholder="Ej: canva.png" />
+        </div>
+
+        <!-- Capacidad -->
+        <div class="form-group full">
+          <label for="fCapacidad">Capacidad relacionada con la Competencia 28</label>
+          <input type="text" id="fCapacidad" placeholder="Ej: Personaliza entornos virtuales segun sus necesidades" />
+        </div>
+
+        <!-- Evidencia -->
+        <div class="form-group full">
+          <label for="fEvidencia">Evidencia esperada</label>
+          <input type="text" id="fEvidencia" placeholder="Ej: Afiche descargado y compartido con el docente" />
+        </div>
+
+      </div><!-- /form-grid -->
+
+      <div class="form-actions">
+        <button class="btn-cancel" id="btnCancel">Cancelar</button>
+        <button class="btn-save"   id="btnSave">Guardar actividad</button>
+      </div>
+
+    </div><!-- /modal -->
+  </div><!-- /overlay -->
+
+  <!-- ================================================
+       TOAST
+  ================================================ -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- ================================================
+       FOOTER
+  ================================================ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-comp">Competencia 28 · Se desenvuelve en entornos virtuales generados por las TIC</p>
+      <p class="footer-copy">Catalogo de Actividades TIC · Educacion Primaria · Peru</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+
+</body>
+</html>
