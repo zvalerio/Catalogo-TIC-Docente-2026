@@ -3,12 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catalogo TIC · Competencia 28 · Primaria</title>
+  <title>Catálogo TIC · Competencia 28 · Primaria</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
+
+  <!-- ================================================
+       CABECERA DE IMPRESIÓN (Oculta en pantalla)
+  ================================================ -->
+  <div class="print-header" aria-hidden="true">
+    <div class="print-logo-wrap">
+      <img src="assets/images/logo.png" alt="Logo de la institución" onerror="this.style.display='none';" />
+    </div>
+    <div class="print-text">
+      <h1>Catálogo de Actividades TIC</h1>
+      <h2>Competencia 28 - Se desenvuelve en entornos virtuales generados por las TIC</h2>
+      <div class="print-meta">
+        <p><strong>Nivel:</strong> Educación Primaria - 1.° a 6.° Grado</p>
+        <p><strong>Fecha:</strong> <span id="printDate"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- INDICADOR DE MODO (Oculto en modo docente) -->
+  <div class="admin-indicator" aria-hidden="true">
+    <span>Modo Administrador</span>
+  </div>
 
   <!-- ================================================
        CABECERA PRINCIPAL
@@ -24,7 +46,7 @@
       <div class="header-logo-wrap">
         <img
           src="assets/images/logo.png"
-          alt="Logo de la institucion educativa"
+          alt="Logo de la institución educativa"
           class="school-logo"
           onerror="this.style.display='none'; document.querySelector('.logo-fallback').style.display='flex';"
         />
@@ -33,9 +55,9 @@
         </div>
       </div>
       <div class="header-text">
-        <p class="header-eyebrow">Educacion Primaria · 1.° a 6.° Grado</p>
-        <h1 class="header-title">Catalogo de Actividades TIC</h1>
-        <p class="header-sub">Competencia 28 · Se desenvuelve en entornos virtuales generados por las TIC</p>
+        <p class="header-eyebrow">Educación Primaria - 1.° a 6.° Grado</p>
+        <h1 class="header-title">Catálogo de Actividades TIC</h1>
+        <p class="header-sub">Competencia 28 - Se desenvuelve en entornos virtuales generados por las TIC</p>
       </div>
     </div>
   </header>
@@ -44,7 +66,7 @@
        BARRA DE NAVEGACION POR GRADO (sticky)
   ================================================ -->
   <nav class="grade-nav" aria-label="Filtrar por grado">
-    <div class="grade-nav-inner">
+    <div class="grade-nav-inner" id="navGrados">
       <button class="btn-grade active" data-grade="todos">Todos los grados</button>
       <button class="btn-grade" data-grade="1">1.° Grado</button>
       <button class="btn-grade" data-grade="2">2.° Grado</button>
@@ -58,7 +80,7 @@
   <!-- ================================================
        BARRA DE CONTROLES
   ================================================ -->
-  <section class="controls-bar" aria-label="Busqueda y filtros">
+  <section class="controls-bar" aria-label="Búsqueda y filtros">
     <div class="controls-inner">
       <div class="search-wrap">
         <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
@@ -72,14 +94,14 @@
           aria-label="Buscar actividades"
         />
       </div>
-      <select id="filterDiff" class="filter-select" aria-label="Filtrar por dificultad">
-        <option value="todos">Dificultad</option>
-        <option value="basico">Basico</option>
-        <option value="intermedio">Intermedio</option>
-        <option value="avanzado">Avanzado</option>
+      <select id="filterCiclo" class="filter-select" aria-label="Filtrar por ciclo">
+        <option value="todos">Ciclo</option>
+        <option value="III">Ciclo III</option>
+        <option value="IV">Ciclo IV</option>
+        <option value="V">Ciclo V</option>
       </select>
       <select id="filterArea" class="filter-select" aria-label="Filtrar por area">
-        <option value="todos">Area curricular</option>
+        <option value="todos">Área curricular</option>
       </select>
       <button class="btn-primary" id="btnAdd" aria-label="Agregar nueva actividad">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
@@ -92,7 +114,9 @@
   <!-- ================================================
        CATALOGO PRINCIPAL
   ================================================ -->
-  <main class="catalog-main" id="catalogContainer" aria-label="Catalogo de actividades"></main>
+  <main class="catalog-main" aria-label="Catálogo de actividades">
+    <div class="catalog-inner" id="catalogContainer"></div>
+  </main>
 
   <!-- ================================================
        MODAL: FORMULARIO AGREGAR / EDITAR
@@ -106,13 +130,13 @@
 
       <div class="form-grid">
 
-        <!-- Titulo -->
+        <!-- Título -->
         <div class="form-group full">
-          <label for="fTitulo">Titulo de la actividad <span class="req">*</span></label>
-          <input type="text" id="fTitulo" placeholder="Ej: Creamos un afiche digital con Canva" />
+          <label for="fTítulo">Título de la actividad <span class="req">*</span></label>
+          <input type="text" id="fTítulo" placeholder="Ej: Creamos un afiche digital con Canva" />
         </div>
 
-        <!-- Grado y dificultad -->
+        <!-- Grado y ciclo -->
         <div class="form-group">
           <label for="fGrade">Grado recomendado <span class="req">*</span></label>
           <select id="fGrade">
@@ -126,25 +150,25 @@
           </select>
         </div>
         <div class="form-group">
-          <label for="fDiff">Nivel de dificultad <span class="req">*</span></label>
-          <select id="fDiff">
-            <option value="">Seleccionar...</option>
-            <option value="basico">Basico</option>
-            <option value="intermedio">Intermedio</option>
-            <option value="avanzado">Avanzado</option>
-          </select>
+            <label for="fCiclo">Ciclo <span class="req">*</span></label>
+            <select id="fCiclo">
+              <option value="">Seleccionar...</option>
+              <option value="III">Ciclo III</option>
+              <option value="IV">Ciclo IV</option>
+              <option value="V">Ciclo V</option>
+            </select>
         </div>
 
-        <!-- Area -->
+        <!-- Área -->
         <div class="form-group full">
-          <label for="fArea">Area o contexto curricular</label>
-          <input type="text" id="fArea" placeholder="Ej: Comunicacion, Ciencia y Tecnologia, Arte..." />
+          <label for="fArea">Área o contexto curricular</label>
+          <input type="text" id="fArea" placeholder="Ej: Comunicación, Ciencia y Tecnología, Arte..." />
         </div>
 
-        <!-- Descripcion -->
+        <!-- Descripción -->
         <div class="form-group full">
-          <label for="fDesc">Descripcion breve <span class="req">*</span></label>
-          <textarea id="fDesc" rows="3" placeholder="Que haran los estudiantes en esta actividad..."></textarea>
+          <label for="fDesc">Descripción breve <span class="req">*</span></label>
+          <textarea id="fDesc" rows="3" placeholder="Que harán los estudiantes en esta actividad..."></textarea>
         </div>
 
         <!-- Recurso TIC -->
@@ -165,7 +189,7 @@
         <!-- Capacidad -->
         <div class="form-group full">
           <label for="fCapacidad">Capacidad relacionada con la Competencia 28</label>
-          <input type="text" id="fCapacidad" placeholder="Ej: Personaliza entornos virtuales segun sus necesidades" />
+          <input type="text" id="fCapacidad" placeholder="Ej: Personaliza entornos virtuales según sus necesidades" />
         </div>
 
         <!-- Evidencia -->
@@ -193,11 +217,40 @@
        FOOTER
   ================================================ -->
   <footer class="site-footer">
-    <div class="footer-inner">
-      <p class="footer-comp">Competencia 28 · Se desenvuelve en entornos virtuales generados por las TIC</p>
-      <p class="footer-copy">Catalogo de Actividades TIC · Educacion Primaria · Peru</p>
-    </div>
-  </footer>
+  <style>
+    .site-footer {
+      background: #111;
+      color: #ccc;
+      padding: 20px;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+
+    .nombre-animado {
+      font-weight: bold;
+      animation: coloresMuyClaros 4s infinite alternate;
+    }
+
+    @keyframes coloresMuyClaros {
+      0%   { color: #ffffff; }
+      25%  { color: #f0f8ff; } /* blanco azulado muy suave */
+      50%  { color: #f5f5ff; } /* lila/blanco muy claro */
+      75%  { color: #f0fff0; } /* verde casi blanco */
+      100% { color: #fffaf0; } /* crema muy claro */
+    }
+  </style>
+
+  <div class="footer-inner">
+    <p class="footer-comp">
+      Competencia 28 · Se desenvuelve en entornos virtuales generados por las TIC
+    </p>
+
+    <p class="footer-copy">
+      Catálogo de Actividades TIC · Elaborado por 
+      <span class="nombre-animado">Mosquera Zevallos Valerio</span>
+    </p>
+  </div>
+</footer>
 
   <script src="assets/js/data.js"></script>
   <script src="assets/js/app.js"></script>
